@@ -1,2 +1,1 @@
-# merity-money
-Merity Money
+# MeritMoneyWeb
