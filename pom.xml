@@ -19,6 +19,7 @@
 		<project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
 		<java.version>11.0.3</java.version>
 		<mapstruct.version>1.3.0.Beta2</mapstruct.version>
+		<flyway.version>6.4.3</flyway.version>
 	</properties>
 
 	<dependencies>
@@ -78,6 +79,12 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-jdk8</artifactId>
 			<version>${mapstruct.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>${flyway.version}</version>
 		</dependency>
     </dependencies>
 
