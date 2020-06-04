@@ -1,0 +1,19 @@
+#Titulo 1
+
+Teste conteudo
+
+## titulo 2
+
+* Lista 1
+* Lista 2
+
+Ex checkbox
+ - [ ] checkbox
+ 
+ ex tabela
+ 
+|header 1| header2|
+|--------|--------|
+|cont1   | cont2  | 
+
+etc
