@@ -1,8 +1,8 @@
-$Documentos auxiliares para a homologação.
+#Documentos auxiliares para a homologação.
 
-$$ Importante: Ao cadastrar um bug, sempre que possível, evidencie o problema (seja por print, vídeo ou gif). Não esqueça de vincular as labels com o tipo e a criticidade do bug.
+## Importante: Ao cadastrar um bug, sempre que possível, evidencie o problema (seja por print, vídeo ou gif). Não esqueça de vincular as labels com o tipo e a criticidade do bug.
 
-$$ Como abrir um bug no GitHub?
+## Como abrir um bug no GitHub?
 
 Logado no projeto, execute os seguintes passos:
 a) Clique na aba Issue.
@@ -12,7 +12,7 @@ d) Preencha os dados do bug, conforme padrão determinado.
 
 OBS: Não se esqueça de vincular o projeto de bug, no campo Projects.
 
-$$ Tags para os tipos de bugs.
+## Tags para os tipos de bugs.
 
 [LT] = Layout
 [RN] = Regra de Negócio
@@ -31,7 +31,7 @@ Exemplo: Situação não prevista pelo analista ou requisito ambíguo.
 API: Bug referente ao comportamento esperado da aplicação.
 Exemplo: Era esperado um retorno com status "200 - OK", porém o retorno foi com o status "500 - Internal Server Error".
 
-$$ Tags para criticidade dos bugs.
+## Tags para criticidade dos bugs.
 
 Use as seguintes tags de criticidade, para classificar seu bug:
 
@@ -54,7 +54,7 @@ Baixo: São bugs que causam pouco impacto, mas que ainda é um problema.
 Ex: Alinhamentos de campos ou mensagens confusas. 
 
 
-$$ Padrão para abertura de bugs.
+## Padrão para abertura de bugs.
 
 Utilizar o padrão BDD (Behavior Driven Development) para descrever os bugs, seguindo o layout:
 
