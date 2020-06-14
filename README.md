@@ -100,6 +100,18 @@ Use the github Pull Request to the "master" branch.
 
 # Technical details
 
-## Profiles
+## Docker
+
+### PostgreSQL
+
+[PostreSQL](https://hub.docker.com/_/postgres) its used in development mode and its the default database
+
+You can find a compose file [here](others/docker/postgres)
+It's possible to access the pg-admin in: http://localhost:16543
+It's nedeed to create a server pointing to you local docker PG instance
+
+## Spring
+
+### Profiles
 
 
