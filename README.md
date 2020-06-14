@@ -2,7 +2,7 @@
 
 # Technologies
 
-* Java 11
+* Java 8 (intension to run with java 11)
 * Spring Boot 2.1.6
 
 # Definitions
