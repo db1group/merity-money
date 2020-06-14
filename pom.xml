@@ -12,7 +12,7 @@
 	<artifactId>merit-money-db1global</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>merit-money-db1global</name>
-	<description>Merit Money - DB1</description>
+	<description>Merit Money</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
