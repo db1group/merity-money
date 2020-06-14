@@ -98,3 +98,8 @@ Use the github Pull Request to the "master" branch.
 ./mvnw test
 ```
 
+# Technical details
+
+## Profiles
+
+
