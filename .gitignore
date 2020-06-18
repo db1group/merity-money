@@ -1,5 +1,7 @@
+### APPLICATION ###
 HELP.md
-target/
+**/target/
+**/db-data/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
