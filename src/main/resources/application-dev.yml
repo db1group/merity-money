@@ -4,19 +4,20 @@ spring:
     jpa:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:
-            ddl-auto: update
+            ddl-auto: validate
         show-sql: true
     datasource:
         driverClassName: org.postgresql.Driver
-        password: merit
         url: jdbc:postgresql://localhost:15432/merit-money-dev
         username: merit_money
-
+        password: merit
+    flyway:
+        enabled: false #Habilitar e desabilitar auto run do flyway
 usuario:
     disco:
         diretorio-foto: fotos/usuarios
         raiz: ./src/main/resources/static/
 
 default:
-    password: teste
-    sender: gabrielcilico@gmail.com
+    password: mert!mon3y
+    sender: meritmoneyruler@gmail.com

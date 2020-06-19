@@ -12,7 +12,8 @@ spring:
         hibernate:
             ddl-auto: none
         show-sql: false
-
+    flyway:
+        enabled: true #Habilitar e desabilitar auto run do flyway
 jwt:
     expiration: 600000
     secret: assinaturaDoToken

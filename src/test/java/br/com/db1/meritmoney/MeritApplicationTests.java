@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MeritMoneyDb1globalApplicationTests {
+public class MeritApplicationTests {
 
 	@Test
 	public void contextLoads() {

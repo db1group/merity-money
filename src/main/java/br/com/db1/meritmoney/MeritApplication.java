@@ -2,13 +2,12 @@ package br.com.db1.meritmoney;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(scanBasePackages = "br.com.db1.meritmoney")
-public class MeritMoneyDb1globalApplication {
+public class MeritApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MeritMoneyDb1globalApplication.class, args);
+		SpringApplication.run(MeritApplication.class, args);
 	}
 
 }
