@@ -1,0 +1,22 @@
+spring:
+    profiles:
+        active: dev
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+    datasource:
+        driverClassName: org.postgresql.Driver
+        password: merit
+        url: jdbc:postgresql://localhost:15432/merit-money-dev
+        username: merit_money
+
+usuario:
+    disco:
+        diretorio-foto: fotos/usuarios
+        raiz: ./src/main/resources/static/
+
+default:
+    password: teste
+    sender: gabrielcilico@gmail.com
