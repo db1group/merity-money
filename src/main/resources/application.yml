@@ -1,0 +1,39 @@
+info:
+    project:
+        version: #project.version#
+
+spring:
+    profiles:
+        active: dev
+    jackson:
+        serialization:
+            fail-on-empty-beans: false
+    jpa:
+        hibernate:
+            ddl-auto: none
+        show-sql: false
+    flyway:
+        enabled: true #Habilitar e desabilitar auto run do flyway
+jwt:
+    expiration: 600000
+    secret: assinaturaDoToken
+
+# actuator
+# ===================================================================
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health
+    endpoint:
+        health:
+            show-details: always
+
+usuario:
+    disco:
+        diretorio-foto: fotos/usuarios
+        raiz: ./src/main/resources/static/
+
+default:
+    password: teste
+    sender: gabrielcilico@gmail.com

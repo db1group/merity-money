@@ -100,7 +100,15 @@ Use the github Pull Request to the "master" branch.
 
 # Technical details
 
+## Status check
+
+To validate access:
+
+    http://[IP]:[PORT]/actuator/health
+
 ## Docker
+
+To use it in [Docker see here](others/docs/docker.md)
 
 ### PostgreSQL
 
@@ -114,4 +122,56 @@ It's nedeed to create a server pointing to you local docker PG instance
 
 ### Profiles
 
+## Flyway
 
+Flyway is Version control for your database
+
+### Maven commands
+
+Validate your scripts
+
+    ./mvnw flyway:validate
+
+Manually run your scripts
+
+    ./mvnw flyway:migrate
+  
+Manually repair your history 
+
+    ./mvnw flyway:repair
+    
+Repairs the Flyway schema history table. This will perform the following actions:
+* Remove any failed migrations on databases without DDL transactions
+(User objects left behind must still be cleaned up manually)
+* Realign the checksums, descriptions and types of the applied migrations with the ones of the available migrations
+        
+### Defined patterns
+
+See it [here](others/docs/flyway/flyway.md)
+
+### Application and Spring integration
+
+System it's configured to up with Flyway and execute all migrations automatically
+
+## Dev
+
+## Tests 
+
+To execute build
+
+    ./mvnw clean install -DskipTests
+    
+To execute tests
+
+    ./mvnw test
+
+## Sonar Quality
+
+To run Sonar:
+
+    ./mvnw verify test sonar:sonar
+
+# Release History
+
+* 0.0.1
+    * Work in progress 
