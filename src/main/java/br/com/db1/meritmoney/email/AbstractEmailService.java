@@ -1,6 +1,7 @@
 package br.com.db1.meritmoney.email;
 
 import br.com.db1.meritmoney.domain.Pessoa;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -9,9 +10,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Properties;
 
-public class AbstractEmailService implements EmailService {
+public abstract class AbstractEmailService implements EmailService {
+    @Value("${email.password}")
+    private String secret;
 
-    protected Session getSession(String email, String senha) {
+    @Value("${email.sender}")
+    private String sender;
+
+    protected Session getSession() {
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "465");
@@ -22,7 +28,7 @@ public class AbstractEmailService implements EmailService {
         return Session.getDefaultInstance(prop,
                 new Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(email, senha);
+                        return new PasswordAuthentication(sender, secret);
                     }
                 });
     }
@@ -32,13 +38,14 @@ public class AbstractEmailService implements EmailService {
         Transport.send(msg);
     }
 
-    protected String getTemplate(String path) {
-        path = "C:/DB1/projetos/merit-money-back/merit-money/src/main/resources/email/"
-                + path
-                + ".html";
+    protected String getTemplate(final String emailTemplate) {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        String relativeEmailPath = "email/";
+        String absEmailPath = classLoader.getResource(relativeEmailPath).getPath();
+        String absTemplateEmailPath = absEmailPath+emailTemplate+".html";
         StringBuilder contentBuilder = new StringBuilder();
         try {
-            BufferedReader in = new BufferedReader(new FileReader(path));
+            BufferedReader in = new BufferedReader(new FileReader(absTemplateEmailPath));
             String line;
             while ((line = in.readLine()) != null) {
                 contentBuilder.append(line);
@@ -51,9 +58,8 @@ public class AbstractEmailService implements EmailService {
     }
 
     protected MimeMessage getMimeMessage(Pessoa pessoa) throws MessagingException {
-        String emailRemetente = "gabrielcilico@gmail.com";
-        MimeMessage message = new MimeMessage(getSession(emailRemetente, "rbmvkqwjrfljawqo"));
-        message.setFrom(new InternetAddress(emailRemetente));
+        MimeMessage message = new MimeMessage(getSession());
+        message.setFrom(new InternetAddress(sender));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(pessoa.getEmail()));
         return message;
     }
