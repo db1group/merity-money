@@ -5,6 +5,7 @@ HELP.md
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+*.log
 
 ### STS ###
 .apt_generated
@@ -31,3 +32,4 @@ build/
 
 ### VS Code ###
 .vscode/
+
