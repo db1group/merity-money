@@ -44,6 +44,7 @@ CREATE TABLE pessoas
 (
     id bigint NOT NULL DEFAULT nextval('pessoas_id_seq'::regclass),
     email character varying(70) COLLATE pg_catalog."default" NOT NULL,
+    linkedin character varying(255) COLLATE pg_catalog."default",
     nome character varying(40) COLLATE pg_catalog."default" NOT NULL,
     path_foto character varying(255) COLLATE pg_catalog."default",
     senha character varying(255) COLLATE pg_catalog."default" NOT NULL,
