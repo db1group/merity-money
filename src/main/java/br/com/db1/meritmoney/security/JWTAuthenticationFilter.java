@@ -1,5 +1,6 @@
 package br.com.db1.meritmoney.security;
 
+import antlr.Token;
 import br.com.db1.meritmoney.service.dto.CredenciaisDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;

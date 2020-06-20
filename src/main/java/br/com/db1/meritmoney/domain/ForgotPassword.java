@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "ForgorPassword")
+@Table(name = "forgor_password")
 public class ForgotPassword extends AbstractEntity<Long> {
 
     @ManyToOne

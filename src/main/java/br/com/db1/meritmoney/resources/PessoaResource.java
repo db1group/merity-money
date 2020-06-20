@@ -12,15 +12,14 @@ import br.com.db1.meritmoney.service.dto.EquipeDto;
 import br.com.db1.meritmoney.service.dto.PessoaDto;
 import br.com.db1.meritmoney.service.dto.UserDto;
 import br.com.db1.meritmoney.service.mapper.PessoaMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.processing.FilerException;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,7 +41,7 @@ public class PessoaResource {
         this.pessoaMapper = pessoaMapper;
     }
 
-    @PostMapping("/cadastrarPorEmail")
+    @PostMapping("/cadastrar-por-email")
     public PessoaDto cadastrarPorEmail(@RequestBody EmailDTO emailDTO) {
         return toDto(pessoaService.cadastrar(emailDTO.getEmail()));
     }
@@ -67,32 +66,33 @@ public class PessoaResource {
                 .salvarPessoa(toEntity(pessoaDto))));
     }
 
-    @GetMapping(produces="application/json") @Transactional(readOnly = true)
-    public ResponseEntity<List<PessoaDto>> listarPessoas() {
-        return ResponseEntity.ok(pessoaService.buscarTodos()
-                .stream()
-                .map(pessoa -> {
-                    return toDto(pessoa);
-                })
-                .collect(Collectors.toList()));
+    @GetMapping(produces="application/json", value = "/buscar/{page}/{size}") @Transactional(readOnly = true)
+    public ResponseEntity<Page<PessoaDto>> listarPessoas(
+            @PathVariable("page") Integer page,
+            @PathVariable("size") Integer size
+    ) {
+        return ResponseEntity.ok(pessoaService.buscarTodos(page, size)
+                .map(pessoa -> toDto(pessoa)));
     }
 
-    @GetMapping(produces="application/json", value = "/buscarPorEquipe/{id}") @Transactional(readOnly = true)
-    public ResponseEntity<List<PessoaDto>> listarPessoasPorEquipe(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(pessoaService.buscarTodosPorEquipeId(id)
-                .stream()
+    @GetMapping(produces="application/json", value = "/buscar-por-equipe/{id}/{page}/{size}") @Transactional(readOnly = true)
+    public ResponseEntity<Page<PessoaDto>> listarPessoasPorEquipe(
+            @PathVariable("id") Long id,
+            @PathVariable("page") Integer page,
+            @PathVariable("size") Integer size
+    ) {
+        return ResponseEntity.ok(pessoaService.buscarTodosPorEquipeId(id, page, size)
                 .map(pessoa -> {
                     return toDto(pessoa);
-                })
-                .collect(Collectors.toList()));
+                }));
     }
 
-    @PostMapping(value = "/buscarPorEmail") @Transactional(readOnly = true)
+    @PostMapping(value = "/buscar-por-email") @Transactional(readOnly = true)
     public ResponseEntity<PessoaDto> buscarPorEmail(@RequestBody EmailDTO emailDTO) {
         return ResponseEntity.ok(toDto(pessoaService.buscarPorEmail(emailDTO.getEmail())));
     }
 
-    @PostMapping(value = "/trocarSenha")
+    @PostMapping(value = "/trocar-senha")
     public ResponseEntity<PessoaDto> trocarSenha(@Valid @RequestBody UserDto userDto){
         UserSS user = UserService.authenticated();
         Pessoa pessoa = pessoaService.buscarPorEmail(userDto.getEmail());
@@ -104,8 +104,8 @@ public class PessoaResource {
         return ResponseEntity.ok(toDto(pessoaService.changePassword(pessoa, userDto.getSenha())));
     }
 
-    @PostMapping(value = "/trocarFoto")
-    public ResponseEntity<String> uploadFoto(@RequestParam MultipartFile foto) throws IOException {
+    @PostMapping(value = "/trocar-foto")
+    public ResponseEntity<String> uploadFoto(@RequestParam("file") MultipartFile foto) throws IOException {
         return ResponseEntity.ok(pessoaService.trocarFoto(foto));
     }
 
@@ -123,9 +123,7 @@ public class PessoaResource {
     public @ResponseBody ResponseEntity<List<PessoaDto>> buscarPorKeyword(@PathVariable("keyword") String keyword) {
         return ResponseEntity.ok(pessoaService.buscarPorKeyword("%" + keyword.toUpperCase() + "%")
                 .stream()
-                .map(pessoa -> {
-                    return toDto(pessoa);
-                })
+                .map(pessoa -> toDto(pessoa))
                 .collect(Collectors.toList()));
     }
 
@@ -159,6 +157,7 @@ public class PessoaResource {
             pessoaDto.setEquipe(equipe);
         }
 
+        pessoaDto.setLinkedin(pessoa.getLinkedin());
         pessoaDto.setCredito(calcularCreditoPorId(id));
         pessoaDto.setDebito(calcularDebitoPorId(id));
         pessoaDto.setSaldo(calcularSaldoPorId(id));
@@ -171,6 +170,7 @@ public class PessoaResource {
 
         pessoa.setNome(pessoaDto.getNome());
         pessoa.setEmail(pessoaDto.getEmail());
+        pessoa.setLinkedin(pessoaDto.getLinkedin());
 
         return pessoa;
     }

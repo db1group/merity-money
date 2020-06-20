@@ -10,6 +10,7 @@ public class PessoaDto {
     private String nome;
     private String email;
     private String pathFoto;
+    private String linkedin;
     private EquipeDto equipe;
     private BigDecimal saldo;
     private BigDecimal credito;
@@ -20,12 +21,14 @@ public class PessoaDto {
             @JsonProperty("id") Long id,
             @JsonProperty("nome") String nome,
             @JsonProperty("email") String email,
+            @JsonProperty("linkedin") String linkedin,
             @JsonProperty("pathFoto") String pathFoto,
             @JsonProperty("equipe") EquipeDto equipe
     ) {
         this.id = id;
         this.nome = nome;
         this.email = email;
+        this.linkedin = linkedin;
         this.pathFoto = pathFoto;
         this.equipe = equipe;
     }
@@ -99,5 +102,13 @@ public class PessoaDto {
 
     public void setDebito(BigDecimal debito) {
         this.debito = debito;
+    }
+
+    public String getLinkedin() {
+        return linkedin;
+    }
+
+    public void setLinkedin(String linkedin) {
+        this.linkedin = linkedin;
     }
 }

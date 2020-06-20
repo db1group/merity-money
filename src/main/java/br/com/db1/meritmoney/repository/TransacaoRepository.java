@@ -2,6 +2,8 @@ package br.com.db1.meritmoney.repository;
 
 import br.com.db1.meritmoney.domain.Pessoa;
 import br.com.db1.meritmoney.domain.Transacao;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,6 +11,10 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
+
+    Page<Transacao> findAllByDestinatarioIdOrderByDateTimeDesc(Long id, Pageable pageable);
+
+    Page<Transacao> findAllByRemetenteIdOrderByDateTimeDesc(Long id, Pageable pageable);
 
     List<Transacao> findAllByDestinatarioIdOrderByDateTimeDesc(Long id);
 

@@ -3,8 +3,10 @@ package br.com.db1.meritmoney.service;
 import br.com.db1.meritmoney.domain.ForgotPassword;
 import br.com.db1.meritmoney.domain.Pessoa;
 import br.com.db1.meritmoney.email.ForgotPasswordEmailService;
+import br.com.db1.meritmoney.exceptions.SenhaInvalidaException;
 import br.com.db1.meritmoney.repository.ForgotPasswordRepository;
 import br.com.db1.meritmoney.repository.PessoaRepository;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -68,6 +70,17 @@ public class AuthService {
         pessoaService.changePassword(pessoa, password);
         forgotPassword.setUsed(true);
         forgotPasswordRepository.save(forgotPassword);
+    }
+
+    public void changePasswordByOldPassword(String email, String oldPassword, String newPassword) {
+        Pessoa pessoa = pessoaRepository.findByEmail(email);
+
+        if (!bCryptPasswordEncoder.matches(oldPassword, pessoa.getSenha())) {
+            throw new SenhaInvalidaException();
+        }
+
+        pessoa.setSenha(bCryptPasswordEncoder.encode(newPassword));
+        pessoaRepository.save(pessoa);
     }
 
     public String newPassword() {

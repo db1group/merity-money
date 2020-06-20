@@ -4,6 +4,7 @@ import br.com.db1.meritmoney.domain.Pessoa;
 import br.com.db1.meritmoney.domain.Transacao;
 import org.springframework.stereotype.Service;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.*;
 import java.text.SimpleDateFormat;
