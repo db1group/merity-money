@@ -13,11 +13,17 @@ spring:
         password: merit
     flyway:
         enabled: false #Habilitar e desabilitar auto run do flyway
+
+logging:
+    level:
+      root: INFO
+      org.springframework.web: INFO
+
 usuario:
     disco:
         diretorio-foto: fotos/usuarios
         raiz: ./src/main/resources/static/
 
-default:
+email:
     password: mert!mon3y
     sender: meritmoneyruler@gmail.com

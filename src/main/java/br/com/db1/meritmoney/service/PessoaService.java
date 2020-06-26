@@ -4,17 +4,20 @@ import br.com.db1.meritmoney.domain.Pessoa;
 import br.com.db1.meritmoney.email.NewUserEmailService;
 import br.com.db1.meritmoney.enums.Perfil;
 import br.com.db1.meritmoney.exceptions.AuthorizationException;
+import br.com.db1.meritmoney.exceptions.EmailJaCadastradoException;
 import br.com.db1.meritmoney.repository.PessoaRepository;
 import br.com.db1.meritmoney.security.UserSS;
 import br.com.db1.meritmoney.storage.Disco;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.processing.FilerException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
@@ -50,7 +53,7 @@ public class PessoaService {
 
     public Pessoa cadastrar(String email) {
         if (pessoaRepository.findByEmail(email) != null) {
-            throw new RuntimeException("Já existe uma pessoa cadastrada com o email '" + email + "'.");
+            throw new EmailJaCadastradoException("Já existe uma pessoa cadastrada com o email '" + email + "'.");
         }
 
         Pessoa pessoa = new Pessoa();
@@ -64,8 +67,9 @@ public class PessoaService {
         return pessoaRepository.save(pessoa);
     }
 
-    public List<Pessoa> buscarTodos() {
-        return pessoaRepository.findAll();
+    public Page<Pessoa> buscarTodos(Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "nome");
+        return pessoaRepository.findAll(pageRequest);
     }
 
 
@@ -74,8 +78,9 @@ public class PessoaService {
         return pessoaRepository.save(pessoa);
     }
 
-    public List<Pessoa> buscarTodosPorEquipeId(Long id) {
-        return pessoaRepository.findAllByEquipeId(id);
+    public Page<Pessoa> buscarTodosPorEquipeId(Long id, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.ASC, "nome");
+        return pessoaRepository.findAllByEquipeId(id, pageRequest);
     }
 
     public Pessoa buscarPorId(Long id) {
@@ -108,5 +113,9 @@ public class PessoaService {
         pessoaRepository.save(pessoa);
 
         return encodedString;
+    }
+
+    public Integer getNumeroDecolaboradoresPorEquipeId(Long id) {
+        return pessoaRepository.countByEquipeId(id);
     }
 }

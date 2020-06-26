@@ -5,6 +5,7 @@ import br.com.db1.meritmoney.security.UserSS;
 import br.com.db1.meritmoney.service.AuthService;
 import br.com.db1.meritmoney.service.UserService;
 import br.com.db1.meritmoney.service.dto.EmailDTO;
+import br.com.db1.meritmoney.service.dto.NovaSenhaDto;
 import br.com.db1.meritmoney.service.dto.PessoaDto;
 import br.com.db1.meritmoney.service.dto.TrocaSenhaDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class AuthResource {
     private PessoaResource pessoaResource;
 
 
-    @PostMapping(value = "/refresh_token")
+    @PostMapping(value = "/refresh-token")
     public ResponseEntity<Void> refreshTolken(HttpServletResponse response) throws IOException {
         UserSS user = UserService.authenticated();
         String token = jwtUtil.generateToken(user.getUsername());
@@ -41,7 +42,7 @@ public class AuthResource {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/get_usuario")
+    @GetMapping(value = "/get-usuario")
     public ResponseEntity<PessoaDto> getUsuario() {
         UserSS user = UserService.authenticated();
 
@@ -51,7 +52,7 @@ public class AuthResource {
         return pessoaResource.buscarPorEmail(emailDTO);
     }
 
-    @GetMapping(value = "/is_valid_token")
+    @GetMapping(value = "/is-valid-token")
     public ResponseEntity<Boolean> isValidToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         token = token.substring(token.indexOf(" ")+1);
@@ -63,13 +64,19 @@ public class AuthResource {
         authService.forgotPassword(email.getEmail());
     }
 
-    @GetMapping(value = "/findEmailByHash/{hash}")
+    @GetMapping(value = "/find-email-by-hash/{hash}")
     public String findEmailByHash(@PathVariable("hash") String hash) {
         return authService.getEmailByHash(hash);
     }
 
-    @PostMapping("/changePasswordByHash")
+    @PostMapping("/change-password-by-hash")
     public void changePasswordByHash(@RequestBody TrocaSenhaDto trocaSenhaDto) {
         authService.changePasswordByHash(trocaSenhaDto.getHash(), trocaSenhaDto.getNewPassword());
+    }
+
+    @PostMapping("/change-password-by-oldpassword")
+    public void changePasswordByOldPassword(@RequestBody NovaSenhaDto novaSenhaDto) {
+        String email = UserService.authenticated().getUsername();
+        authService.changePasswordByOldPassword(email, novaSenhaDto.getSenhaAntiga(), novaSenhaDto.getNovaSenha());
     }
 }

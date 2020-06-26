@@ -1,5 +1,7 @@
 package br.com.db1.meritmoney.service.dto;
 
+import br.com.db1.meritmoney.domain.AbstractEntity;
+
 import java.io.Serializable;
 
 public class CredenciaisDto implements Serializable {

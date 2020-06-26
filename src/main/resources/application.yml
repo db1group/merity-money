@@ -1,10 +1,17 @@
 info:
     project:
         version: #project.version#
+server:
+    port: 8082
 
 spring:
     profiles:
         active: dev
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false # we use gulp + BrowserSync for livereload
     jackson:
         serialization:
             fail-on-empty-beans: false
@@ -28,6 +35,13 @@ management:
     endpoint:
         health:
             show-details: always
+
+# ===================================================================
+# Desabilitado o health check do config server.
+# ===================================================================
+health:
+    config:
+        enabled: false
 
 usuario:
     disco:

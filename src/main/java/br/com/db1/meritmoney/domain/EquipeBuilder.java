@@ -1,7 +1,5 @@
 package br.com.db1.meritmoney.domain;
 
-import java.util.List;
-
 public final class EquipeBuilder {
     private Long id;
     private String nome;

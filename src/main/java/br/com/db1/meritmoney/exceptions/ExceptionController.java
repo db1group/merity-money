@@ -3,6 +3,7 @@ package br.com.db1.meritmoney.exceptions;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,6 +34,18 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
+    @ExceptionHandler(SenhaInvalidaException.class)
+    public ResponseEntity<StandartError> senhaInvalida(AuthorizationException e, HttpServletRequest request) {
+        StandartError error = new StandartError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Senha inválida", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<StandartError> emailJaCadastrado(AuthorizationException e, HttpServletRequest request) {
+        StandartError error = new StandartError(System.currentTimeMillis(), HttpStatus.CONFLICT.value(), "Email em uso", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationError> validationError(MethodArgumentNotValidException e, HttpServletRequest request) {
         ValidationError error = new ValidationError(System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", e.getMessage(), request.getRequestURI());
@@ -50,7 +63,19 @@ public class ExceptionController {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<StandartError> loginFailure(FilerException e, HttpServletRequest request) {
-        StandartError error = new StandartError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Usuário ou senha inválida ", e.getMessage(), request.getRequestURI());
+        StandartError error = new StandartError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Usuário ou senha inválida", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    @ExceptionHandler(DestinatarioInvalidoException.class)
+    public ResponseEntity<StandartError> invalidDestinatario(FilerException e, HttpServletRequest request) {
+        StandartError error = new StandartError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Usuário destinatário inválido", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(RemetenteInvalidoException.class)
+    public ResponseEntity<StandartError> invalidRemetente(FilerException e, HttpServletRequest request) {
+        StandartError error = new StandartError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Usuário remetente inválido", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

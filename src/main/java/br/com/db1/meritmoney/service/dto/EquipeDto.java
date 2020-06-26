@@ -11,6 +11,8 @@ public class EquipeDto {
 
     private String descricao;
 
+    private Integer numeroDeColaboradores;
+
     private String pathFoto;
 
     public EquipeDto() {
@@ -46,5 +48,13 @@ public class EquipeDto {
 
     public void setPathFoto(String pathFoto) {
         this.pathFoto = pathFoto;
+    }
+
+    public Integer getNumeroDeColaboradores() {
+        return numeroDeColaboradores;
+    }
+
+    public void setNumeroDeColaboradores(Integer numeroDeColaboradores) {
+        this.numeroDeColaboradores = numeroDeColaboradores;
     }
 }

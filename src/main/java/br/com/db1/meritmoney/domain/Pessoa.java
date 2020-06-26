@@ -33,6 +33,9 @@ public class Pessoa extends AbstractEntity<Long> {
     @Column(name = "path_foto")
     private String pathFoto;
 
+    @Column(name = "linkedin")
+    private String linkedin;
+
     @ManyToOne
     @JsonBackReference("equipe_pessoa")
     private Equipe equipe;
@@ -79,6 +82,14 @@ public class Pessoa extends AbstractEntity<Long> {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getLinkedin() {
+        return linkedin;
+    }
+
+    public void setLinkedin(String linkedin) {
+        this.linkedin = linkedin;
     }
 
     public Set<Perfil> getPerfis() {
