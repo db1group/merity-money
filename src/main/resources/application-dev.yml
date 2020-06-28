@@ -12,7 +12,7 @@ spring:
         username: merit_money
         password: merit
     flyway:
-        enabled: false #Habilitar e desabilitar auto run do flyway
+        enabled: true #Habilitar e desabilitar auto run do flyway
 
 logging:
     level:

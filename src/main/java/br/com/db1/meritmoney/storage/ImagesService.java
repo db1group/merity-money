@@ -22,7 +22,10 @@ public class ImagesService {
 
     public String salvarFoto(MultipartFile foto, String id, EImagesNames imagesName) {
         confirmBucket();
-        // Upload the zip file to the bucket with putObject
+        return uploadFile(foto, id, imagesName);
+    }
+
+    private String uploadFile(MultipartFile foto, String id, EImagesNames imagesName) {
         try {
             String objectName = createImageName(id, imagesName);
             minioClient.putObject(bucketImages, objectName, foto.getInputStream(), getOptions(foto));
@@ -43,11 +46,9 @@ public class ImagesService {
     }
 
     private String createImageName(String id, EImagesNames imagesName) {
-        return imagesName.getDesc() + "_" + id;
-    }
-
-    private String createFileName(String id, String originalName, EImagesNames imagesName) {
-        return imagesName.getDesc() + "_" + id;
+        String folder = imagesName.getDesc();
+        String objectName = imagesName.getDesc() + "_" + id;
+        return folder + "." + objectName;
     }
 
     private void confirmBucket() {

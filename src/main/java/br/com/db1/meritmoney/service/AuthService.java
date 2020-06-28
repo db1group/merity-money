@@ -18,18 +18,17 @@ public class AuthService {
 
     private final PessoaRepository pessoaRepository;
     private final PessoaService pessoaService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordGenerator passwordGenerator;
     private final ForgotPasswordEmailService forgotPasswordEmailService;
     private final ForgotPasswordRepository forgotPasswordRepository;
-    private final Random random = new Random();
 
     public AuthService(PessoaRepository pessoaRepository, PessoaService pessoaService,
-                       BCryptPasswordEncoder bCryptPasswordEncoder,
+                       PasswordGenerator passwordGenerator,
                        ForgotPasswordEmailService forgotPasswordEmailService,
                        ForgotPasswordRepository forgotPasswordRepository) {
         this.pessoaRepository = pessoaRepository;
         this.pessoaService = pessoaService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordGenerator = passwordGenerator;
         this.forgotPasswordEmailService = forgotPasswordEmailService;
         this.forgotPasswordRepository = forgotPasswordRepository;
     }
@@ -74,35 +73,12 @@ public class AuthService {
     public void changePasswordByOldPassword(String email, String oldPassword, String newPassword) {
         Pessoa pessoa = pessoaRepository.findByEmail(email);
 
-        if (!bCryptPasswordEncoder.matches(oldPassword, pessoa.getSenha())) {
+        if (!passwordGenerator.matches(oldPassword, pessoa.getSenha())) {
             throw new SenhaInvalidaException();
         }
 
-        pessoa.setSenha(bCryptPasswordEncoder.encode(newPassword));
+        pessoa.setSenha(passwordGenerator.encode(newPassword));
         pessoaRepository.save(pessoa);
     }
 
-    public String newPassword() {
-        char[] pass = new char[10];
-
-        for (int i = 0; i < 10; i++) {
-            pass[i] = randomChar();
-        }
-        return new String(pass);
-    }
-
-    private char randomChar() {
-        switch (random.nextInt(3)) {
-            case 0: {
-                return (char) (random.nextInt(10) + 48);
-            }
-            case 1: {
-                return (char) (random.nextInt(26) + 65);
-            }
-            case 2: {
-                return (char) (random.nextInt(26) + 97);
-            }
-        }
-        return (char) 40;
-    }
 }

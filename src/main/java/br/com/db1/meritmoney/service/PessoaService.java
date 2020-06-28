@@ -12,7 +12,6 @@ import br.com.db1.meritmoney.storage.ImagesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,17 +24,15 @@ public class PessoaService {
 
     private final PessoaRepository pessoaRepository;
     private final ImagesService imagesService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final AuthService authService;
+    private final PasswordGenerator passwordGenerator;
     private final NewUserEmailService newUserEmailService;
 
     public PessoaService(PessoaRepository pessoaRepository, ImagesService imagesService,
-                         BCryptPasswordEncoder bCryptPasswordEncoder, AuthService authService,
+                         PasswordGenerator passwordGenerator,
                          NewUserEmailService newUserEmailService) {
         this.pessoaRepository = pessoaRepository;
         this.imagesService = imagesService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.authService = authService;
+        this.passwordGenerator = passwordGenerator;
         this.newUserEmailService = newUserEmailService;
     }
 
@@ -57,8 +54,8 @@ public class PessoaService {
 
         pessoa.setNome(email.substring(0,email.indexOf("@")));
         pessoa.setEmail(email);
-        String senha = authService.newPassword();
-        pessoa.setSenha(bCryptPasswordEncoder.encode(senha));
+        String senha = passwordGenerator.newEncodedPassword();
+        pessoa.setSenha(senha);
 
         newUserEmailService.emailHTMLSenderFromPessoa(pessoa, senha);
         return pessoaRepository.save(pessoa);
@@ -71,7 +68,7 @@ public class PessoaService {
 
 
     public Pessoa changePassword(Pessoa pessoa, String password) {
-        pessoa.setSenha(bCryptPasswordEncoder.encode(password));
+        pessoa.setSenha(passwordGenerator.encode(password));
         return pessoaRepository.save(pessoa);
     }
 
