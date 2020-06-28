@@ -27,6 +27,8 @@
 		<mail.version>1.4</mail.version>
 		<jjwt.version>0.7.0</jjwt.version>
 
+		<minio.version>7.0.2</minio.version>
+
 		<!--Docker build-->
 		<jib-maven-plugin.version>2.0.0</jib-maven-plugin.version>
 
@@ -100,6 +102,12 @@
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>${mail.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio.version}</version>
 		</dependency>
 
 		<!-- TESTS-->

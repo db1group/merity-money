@@ -42,12 +42,3 @@ management:
 health:
     config:
         enabled: false
-
-usuario:
-    disco:
-        diretorio-foto: fotos/usuarios
-        raiz: ./src/main/resources/static/
-
-default:
-    password: teste
-    sender: gabrielcilico@gmail.com

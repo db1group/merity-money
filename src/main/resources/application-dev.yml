@@ -19,11 +19,17 @@ logging:
       root: INFO
       org.springframework.web: INFO
 
-usuario:
-    disco:
-        diretorio-foto: fotos/usuarios
-        raiz: ./src/main/resources/static/
-
-email:
-    password: mert!mon3y
-    sender: meritmoneyruler@gmail.com
+application:
+    minio:
+        host: http://localhost:39000
+        accessKey: accessKey
+        secretKey: secretKey
+        bucket:
+            images: images_folder
+    mail:
+        smtp:
+            host: smtp.gmail.com
+            port: 465
+            auth: true
+        password: teste
+        sender: gabrielcilico@gmail.com
