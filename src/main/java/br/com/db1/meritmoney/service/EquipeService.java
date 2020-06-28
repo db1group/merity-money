@@ -3,6 +3,7 @@ package br.com.db1.meritmoney.service;
 import br.com.db1.meritmoney.domain.Equipe;
 import br.com.db1.meritmoney.repository.EquipeRepository;
 import br.com.db1.meritmoney.storage.EImagesNames;
+import br.com.db1.meritmoney.storage.ImageFileVO;
 import br.com.db1.meritmoney.storage.ImagesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -52,12 +53,12 @@ public class EquipeService {
 
     public String trocarFoto(MultipartFile foto, Long equipeId) {
         Equipe equipe = equipeRepository.getOne(equipeId);
-        String url = imagesService.salvarFoto(foto, equipeId.toString(), EImagesNames.TEAM_PHOTO);
+        ImageFileVO saved = imagesService.salvarFoto(foto, equipeId.toString(), EImagesNames.TEAM_PHOTO);
 
-        equipe.setPathFoto(url);
+        equipe.setPathFoto(saved.getUrl());
         equipeRepository.save(equipe);
 
-        return url;
+        return saved.getUrl();
     }
 
     public Integer getNumeroDeColaboradoresPorId(Long id) {

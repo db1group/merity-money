@@ -25,7 +25,7 @@ application:
         accessKey: accessKey
         secretKey: secretKey
         bucket:
-            images: images_folder
+            images: images-folder
     mail:
         smtp:
             host: smtp.gmail.com

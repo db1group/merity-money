@@ -8,6 +8,7 @@ import br.com.db1.meritmoney.exceptions.EmailJaCadastradoException;
 import br.com.db1.meritmoney.repository.PessoaRepository;
 import br.com.db1.meritmoney.security.UserSS;
 import br.com.db1.meritmoney.storage.EImagesNames;
+import br.com.db1.meritmoney.storage.ImageFileVO;
 import br.com.db1.meritmoney.storage.ImagesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -97,13 +98,13 @@ public class PessoaService {
 
     public String trocarFoto(MultipartFile foto) {
         Pessoa pessoa = pessoaRepository.findByEmail(UserContextUtil.authenticated().getUsername());
-        String url = imagesService.salvarFoto(foto, pessoa.getId().toString(), EImagesNames.PROFILE_PHOTO);
+        ImageFileVO saved = imagesService.salvarFoto(foto, pessoa.getId().toString(), EImagesNames.PROFILE_PHOTO);
 
-        pessoa.setPathFoto(url);
+        pessoa.setPathFoto(saved.getUrl());
 
         pessoaRepository.save(pessoa);
 
-        return url;
+        return saved.getUrl();
     }
 
     public Integer getNumeroDecolaboradoresPorEquipeId(Long id) {
