@@ -3,26 +3,30 @@ package br.com.db1.meritmoney.email;
 import br.com.db1.meritmoney.domain.Pessoa;
 import org.springframework.stereotype.Service;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 @Service
-public class NewUserEmailService extends AbstractEmailService {
+public class NewUserEmailService {
+
+    private final IEmailService emailService;
 
     //TODO jogar para um emial constants ou enum
     public static final String NEW_USER_TEMPLATE = "NewUserTemplate";
 
+    public NewUserEmailService(IEmailService emailService) {
+        this.emailService = emailService;
+    }
+
     public void emailSenderFromNewPessoa(Pessoa pessoa, String password) throws MessagingException {
 
-        MimeMessage message = getMimeMessage(pessoa);
+        MimeMessage message = emailService.getMimeMessage(pessoa.getEmail());
         String content = "Seu email: " + pessoa.getEmail() + "<br> Sua senha: " + password;
         message.setContent(content, "text/html; charset=utf-8");
 
-        send(message);
+        emailService.send(message);
     }
 
     public void emailHTMLSenderFromPessoa(Pessoa pessoa, String password) {
@@ -30,7 +34,7 @@ public class NewUserEmailService extends AbstractEmailService {
 
             String encodingOptions = "text/html; charset=utf-8";
 
-            String template = getTemplate(NEW_USER_TEMPLATE);
+            String template = emailService.getTemplate(NEW_USER_TEMPLATE);
             String emailBody = template
                     .replaceAll("#email#", pessoa.getEmail())
                     .replaceAll("#senha#", password);
@@ -42,11 +46,11 @@ public class NewUserEmailService extends AbstractEmailService {
 
             mimeMultipart.addBodyPart(mbp);
 
-            MimeMessage mimeMessage = getMimeMessage(pessoa);
+            MimeMessage mimeMessage = emailService.getMimeMessage(pessoa.getEmail());
             mimeMessage.setContent(mimeMultipart);
             mimeMessage.setSubject("Você tem uma nova conta em MeritMoney");
 
-            send(mimeMessage);
+            emailService.send(mimeMessage);
 
         } catch(Exception e) {
             e.printStackTrace();

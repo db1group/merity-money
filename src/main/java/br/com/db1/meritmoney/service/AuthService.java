@@ -6,8 +6,6 @@ import br.com.db1.meritmoney.email.ForgotPasswordEmailService;
 import br.com.db1.meritmoney.exceptions.SenhaInvalidaException;
 import br.com.db1.meritmoney.repository.ForgotPasswordRepository;
 import br.com.db1.meritmoney.repository.PessoaRepository;
-import org.apache.tomcat.websocket.AuthenticationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,22 +16,23 @@ import java.util.UUID;
 @Service
 public class AuthService {
 
-    @Autowired
-    private PessoaRepository pessoaRepository;
+    private final PessoaRepository pessoaRepository;
+    private final PessoaService pessoaService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ForgotPasswordEmailService forgotPasswordEmailService;
+    private final ForgotPasswordRepository forgotPasswordRepository;
+    private final Random random = new Random();
 
-    @Autowired
-    private PessoaService pessoaService;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private ForgotPasswordEmailService forgotPasswordEmailService;
-
-    @Autowired
-    private ForgotPasswordRepository forgotPasswordRepository;
-
-    private Random random = new Random();
+    public AuthService(PessoaRepository pessoaRepository, PessoaService pessoaService,
+                       BCryptPasswordEncoder bCryptPasswordEncoder,
+                       ForgotPasswordEmailService forgotPasswordEmailService,
+                       ForgotPasswordRepository forgotPasswordRepository) {
+        this.pessoaRepository = pessoaRepository;
+        this.pessoaService = pessoaService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.forgotPasswordEmailService = forgotPasswordEmailService;
+        this.forgotPasswordRepository = forgotPasswordRepository;
+    }
 
     public void forgotPassword(String email) {
         Pessoa pessoa = pessoaRepository.findByEmail(email);

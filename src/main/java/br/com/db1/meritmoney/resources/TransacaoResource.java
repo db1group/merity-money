@@ -8,7 +8,7 @@ import br.com.db1.meritmoney.exceptions.SaldoInsuficienteException;
 import br.com.db1.meritmoney.repository.TransacaoRepository;
 import br.com.db1.meritmoney.service.PessoaService;
 import br.com.db1.meritmoney.service.TransacaoService;
-import br.com.db1.meritmoney.service.UserService;
+import br.com.db1.meritmoney.service.UserContextUtil;
 import br.com.db1.meritmoney.service.dto.PessoaDto;
 import br.com.db1.meritmoney.service.dto.TransacaoDto;
 import br.com.db1.meritmoney.service.dto.TransacaoInfosDto;
@@ -66,7 +66,7 @@ public class TransacaoResource {
         if (transacaoDto.getRemetente().getId().equals(transacaoDto.getDestinatario().getId())) {
             throw new DestinatarioInvalidoException();
         }
-        if (!transacaoDto.getRemetente().getEmail().equals(UserService.authenticated().getUsername())) {
+        if (!transacaoDto.getRemetente().getEmail().equals(UserContextUtil.authenticated().getUsername())) {
             throw new RemetenteInvalidoException();
         }
         BigDecimal saldo = pessoaResource.calcularSaldoPorId(transacaoDto.getRemetente().getId());
