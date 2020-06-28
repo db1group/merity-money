@@ -4,6 +4,7 @@ public class ImageFileVO {
 
     private String originalName;
     private String name;
+    private String bucketName;
     private String relativePath;
     private String url;
     private String contentType;
@@ -23,6 +24,14 @@ public class ImageFileVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getBucketName() {
+        return bucketName;
+    }
+
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName;
     }
 
     public String getRelativePath() {

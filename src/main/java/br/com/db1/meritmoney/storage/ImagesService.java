@@ -32,10 +32,14 @@ public class ImagesService {
         imageFileVO.setOriginalName(foto.getOriginalFilename());
         String objectName = createImageName(id, imagesName, foto);
         imageFileVO.setName(objectName);
+        imageFileVO.setBucketName(bucketImages);
 
         try {
             PutObjectOptions options = getOptions(imageFileVO);
             minioClient.putObject(bucketImages, objectName, foto.getInputStream(), options);
+            //TODO necessário criar um endpoint ou mudar o carregamento para setar a url pois o presigned tem tempo de expiraçao
+            //criar um campo de object name e bucketname nas entidades pessoa e time
+            //no endpoint especifico ou no carregamento, obter a url temporaria de acesso
             String fullUrl = minioClient.presignedGetObject(bucketImages, objectName);
             String relativePath = getRelativePath(bucketImages, fullUrl);
             imageFileVO.setUrl(fullUrl);
