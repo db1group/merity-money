@@ -2,10 +2,9 @@ package br.com.db1.meritmoney.service;
 
 import br.com.db1.meritmoney.domain.Equipe;
 import br.com.db1.meritmoney.repository.EquipeRepository;
-import br.com.db1.meritmoney.service.mapper.EquipeMapper;
-import br.com.db1.meritmoney.storage.Disco;
+import br.com.db1.meritmoney.storage.EImagesNames;
+import br.com.db1.meritmoney.storage.ImagesService;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,15 +21,13 @@ import java.util.List;
 @Transactional
 public class EquipeService {
 
-    private EquipeRepository equipeRepository;
+    private final EquipeRepository equipeRepository;
+    private final ImagesService imagesService;
+    private final PessoaService pessoaService;
 
-    @Autowired
-    private Disco disco;
-
-    private PessoaService pessoaService;
-
-    public EquipeService(EquipeRepository equipeRepository, EquipeMapper equipeMapper, PessoaService pessoaService) {
+    public EquipeService(EquipeRepository equipeRepository, ImagesService imagesService, PessoaService pessoaService) {
         this.equipeRepository = equipeRepository;
+        this.imagesService = imagesService;
         this.pessoaService = pessoaService;
     }
 
@@ -60,7 +57,7 @@ public class EquipeService {
     public String trocarFoto(MultipartFile foto, Long equipeId) {
 
         try {
-            String path = disco.salvarFoto(foto);
+            String path = imagesService.salvarFoto(foto, equipeId.toString(), EImagesNames.TEAM_PHOTO);
             Equipe equipe = equipeRepository.getOne(equipeId);
             byte[] imgContent = FileUtils.readFileToByteArray(new File(path));
             String encodedString = "data:image.jpg;base64," + Base64.getEncoder().encodeToString(imgContent);
