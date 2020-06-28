@@ -1,3 +1,7 @@
+# Public Dockerhub account
+
+https://hub.docker.com/r/meritmoneydb1/meritmoney
+
 # Rodando com Docker
 
 Para criar a imagem docker é necessário que o Docker esteja instalado e autenticado.
@@ -12,7 +16,7 @@ Para rodar:
 docker-compose -f others/docker/app.yml up -d
 ```
 
-> jib/entrypoint.sh
+> others/jib/entrypoint.sh
 
 Caso tenha o erro "bash: /entrypoint.sh: /bin/sh^M: bad interpreter: No such file or directory" 
 
@@ -30,7 +34,7 @@ Após ajustar o arquivo criar a imagem novamente.
 Por enquanto está sendo utilizado um repositório privado para a imagem, criado no Docker Hub.
 
 ``` 
-docker tag telecom:latest [NOME_TAG_DOCKER_HUB]
+docker tag meritmoney:latest [NOME_TAG_DOCKER_HUB]
 
 docker push [NOME_TAG_DOCKER_HUB]
 ``` 
@@ -74,13 +78,12 @@ https://docs.docker.com/docker-hub/publish/publish/
 
 Criar a tag DockerHub com base na TAG criada usando o commando do maven
 ``` 
-docker tag meritmoney:latest SEU_DOCKER_ID/meritmoney:latest
-docker tag meritmoney:latest SEU_DOCKER_ID/meritmoney:latest
+docker tag meritmoney:latest meritmoneydb1/meritmoney:latest
 ``` 
 
 Enviar para a DockerHUb
 ``` 
-docker push SEU_DOCKER_ID/meritmoney:latest
+docker push meritmoneydb1/meritmoney:latest
 ``` 
 
 Na hora de executar a imagem

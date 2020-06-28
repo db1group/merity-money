@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  nginx-server:
+    image: nginx:1.17.8
+    volumes:
+      - ../../:/var/www/html:rw
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      #        - ${APP_PORT:32280}:80
+      - 32280:80
+    networks:
+      - anb-backend-network

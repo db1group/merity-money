@@ -155,7 +155,7 @@ System it's configured to up with Flyway and execute all migrations automaticall
 
 ## Dev
 
-## Tests 
+### Tests 
 
 To execute build
 
@@ -165,7 +165,7 @@ To execute tests
 
     ./mvnw test
 
-## Sonar Quality
+### Sonar Quality
 
 To run Sonar:
 

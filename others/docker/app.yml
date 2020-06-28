@@ -1,39 +1,18 @@
-version: "3.3"
-
+version: '3'
 services:
-  merit-pg-db:
-    image: postgres:12.3-alpine
-    restart: always
+  telecom-app:
+    image: telecom
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-merit_money}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-merit}
-      POSTGRES_PRIMARY_USER: postgres
-      POSTGRES_PRIMARY_PASSWORD: yoursecurepassword
-      POSTGRES_DB: ${POSTGRES_DB:-merit-money-dev}
-      TZ: GMT
+        JAVA_OPTIONS: -Xmx512m -Xms256m
+        SPRING_PROFILES_ACTIVE: dev
+        APP_START_SLEEP: 5 # gives time for other services to boot before the application
+        POSTGRES_USER: ${POSTGRES_USER:-merit_money}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-merit}
+        POSTGRES_PRIMARY_USER: postgres
+        POSTGRES_PRIMARY_PASSWORD: yoursecurepassword
+        POSTGRES_DB: ${POSTGRES_DB:-merit-money-dev}
+        TZ: GMT
     ports:
-      - 15432:5432
+      - 8081:8081
     volumes:
-      - merit-pg-data:/var/lib/postgresql/data:rw
-    networks:
-      - merit-backend-network
-
-  merit-pg-db-admin:
-    image: "dpage/pgadmin4:4.22"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "meritadmin@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "meritadmin"
-    ports:
-      - 16543:80
-    depends_on:
-      - merit-pg-db
-    networks:
-      - merit-backend-network
-    restart: unless-stopped
-
-volumes:
-  merit-pg-data:
-
-networks:
-  merit-backend-network:
-    driver: bridge
+      - ./logs/externalLogs/:/logs

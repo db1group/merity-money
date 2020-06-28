@@ -1,0 +1,41 @@
+version: '3'
+services:
+  merit-nginx-server:
+    image: nginx
+    volumes:
+      - ../../:/var/www/html:rw
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      - 32280:80
+    networks:
+      - merit-backend-network
+
+  merit-api:
+    image: meritmoneydb1/meritmoney:latest
+    environment:
+      JAVA_OPTIONS: -Xmx512m -Xms256m
+      SPRING_PROFILES_ACTIVE: dev
+      APP_START_SLEEP: 5 # gives time for other services to boot before the application
+      POSTGRES_USER: ${POSTGRES_USER:-merit_money}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-merit}
+      POSTGRES_PRIMARY_USER: postgres
+      POSTGRES_PRIMARY_PASSWORD: yoursecurepassword
+      POSTGRES_DB: ${POSTGRES_DB:-merit-money-dev}
+      POSTGRES_DB_HOST: ${POSTGRES_DB_HOST:-192.168.12.12}
+      POSTGRES_DB_PORT: ${POSTGRES_DB_PORT:-1552}
+      TZ: GMT
+    ports:
+      - 32282:8082
+    volumes:
+      - ./logs/externalLogs/:/logs
+
+  merit-app:
+    image: meritmoneydb1/meritmoneyfront:latest
+    ports:
+      - 32281:80
+    networks:
+      - merit-backend-network
+
+networks:
+  merit-backend-network:
+    driver: bridge
