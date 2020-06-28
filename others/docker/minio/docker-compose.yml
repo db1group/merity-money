@@ -9,6 +9,7 @@ services:
       MINIO_SECRET_KEY: secretKey
     ports:
       - 39000:9000
+    command: server http://merit-file-server/data
     volumes:
       - merit-file-svr-data:/data:rw
     networks:

@@ -37,6 +37,7 @@ services:
     environment:
       MINIO_ACCESS_KEY: accessKey
       MINIO_SECRET_KEY: secretKey
+    command: server /data/minio
     ports:
       - 39000:9000
     volumes:
