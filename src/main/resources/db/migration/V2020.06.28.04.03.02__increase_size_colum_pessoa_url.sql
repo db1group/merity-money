@@ -1,0 +1,1 @@
+alter table pessoas ALTER COLUMN  path_foto TYPE varchar (4000);

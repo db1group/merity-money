@@ -3,7 +3,7 @@ package br.com.db1.meritmoney.service;
 import br.com.db1.meritmoney.security.UserSS;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-public class UserService {
+public class UserContextUtil {
 
     public static UserSS authenticated() {
         try {

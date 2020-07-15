@@ -6,7 +6,7 @@ import br.com.db1.meritmoney.exceptions.AuthorizationException;
 import br.com.db1.meritmoney.security.UserSS;
 import br.com.db1.meritmoney.service.PessoaService;
 import br.com.db1.meritmoney.service.TransacaoService;
-import br.com.db1.meritmoney.service.UserService;
+import br.com.db1.meritmoney.service.UserContextUtil;
 import br.com.db1.meritmoney.service.dto.EmailDTO;
 import br.com.db1.meritmoney.service.dto.EquipeDto;
 import br.com.db1.meritmoney.service.dto.PessoaDto;
@@ -55,7 +55,7 @@ public class PessoaResource {
 
     @PutMapping("/alterar")
     public ResponseEntity<PessoaDto> alterarPessoa(@RequestBody PessoaDto pessoaDto) {
-        UserSS user = UserService.authenticated();
+        UserSS user = UserContextUtil.authenticated();
         Pessoa pessoa = pessoaService.buscarPorEmail(pessoaDto.getEmail());
 
         if (user == null || !pessoa.getId().equals(user.getId())) {
@@ -94,7 +94,7 @@ public class PessoaResource {
 
     @PostMapping(value = "/trocar-senha")
     public ResponseEntity<PessoaDto> trocarSenha(@Valid @RequestBody UserDto userDto){
-        UserSS user = UserService.authenticated();
+        UserSS user = UserContextUtil.authenticated();
         Pessoa pessoa = pessoaService.buscarPorEmail(userDto.getEmail());
 
         if (user == null || !pessoa.getId().equals(user.getId())) {

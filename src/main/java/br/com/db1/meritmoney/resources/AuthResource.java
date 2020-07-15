@@ -3,7 +3,7 @@ package br.com.db1.meritmoney.resources;
 import br.com.db1.meritmoney.security.JWTUtil;
 import br.com.db1.meritmoney.security.UserSS;
 import br.com.db1.meritmoney.service.AuthService;
-import br.com.db1.meritmoney.service.UserService;
+import br.com.db1.meritmoney.service.UserContextUtil;
 import br.com.db1.meritmoney.service.dto.EmailDTO;
 import br.com.db1.meritmoney.service.dto.NovaSenhaDto;
 import br.com.db1.meritmoney.service.dto.PessoaDto;
@@ -34,7 +34,7 @@ public class AuthResource {
 
     @PostMapping(value = "/refresh-token")
     public ResponseEntity<Void> refreshTolken(HttpServletResponse response) throws IOException {
-        UserSS user = UserService.authenticated();
+        UserSS user = UserContextUtil.authenticated();
         String token = jwtUtil.generateToken(user.getUsername());
         response.addHeader("Authorization", "Bearer " + token);
         PrintWriter writer = response.getWriter();
@@ -44,7 +44,7 @@ public class AuthResource {
 
     @GetMapping(value = "/get-usuario")
     public ResponseEntity<PessoaDto> getUsuario() {
-        UserSS user = UserService.authenticated();
+        UserSS user = UserContextUtil.authenticated();
 
         EmailDTO emailDTO = new EmailDTO();
         emailDTO.setEmail(user.getUsername());
@@ -76,7 +76,7 @@ public class AuthResource {
 
     @PostMapping("/change-password-by-oldpassword")
     public void changePasswordByOldPassword(@RequestBody NovaSenhaDto novaSenhaDto) {
-        String email = UserService.authenticated().getUsername();
+        String email = UserContextUtil.authenticated().getUsername();
         authService.changePasswordByOldPassword(email, novaSenhaDto.getSenhaAntiga(), novaSenhaDto.getNovaSenha());
     }
 }

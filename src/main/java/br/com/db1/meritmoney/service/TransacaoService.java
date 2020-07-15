@@ -17,13 +17,12 @@ import java.util.List;
 @Transactional
 public class TransacaoService {
 
-    private TransacaoRepository transacaoRepository;
+    private final TransacaoRepository transacaoRepository;
+    private final TransacaoEmailService transacaoEmailSender;
 
-    private TransacaoEmailService transacaoEmailSender;
-
-    public TransacaoService(TransacaoRepository transacaoRepository) {
+    public TransacaoService(TransacaoRepository transacaoRepository, TransacaoEmailService transacaoEmailSender) {
         this.transacaoRepository = transacaoRepository;
-        this.transacaoEmailSender = new TransacaoEmailService();
+        this.transacaoEmailSender = transacaoEmailSender;
     }
 
     public Transacao salvarTransacao(Transacao transacao) {

@@ -4,20 +4,25 @@ import br.com.db1.meritmoney.domain.Pessoa;
 import br.com.db1.meritmoney.domain.Transacao;
 import org.springframework.stereotype.Service;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.*;
 import java.text.SimpleDateFormat;
 
 @Service
-public class TransacaoEmailService extends AbstractEmailService {
+public class TransacaoEmailService {
+
+    private final IEmailService emailService;
+
+    public TransacaoEmailService(IEmailService emailService) {
+        this.emailService = emailService;
+    }
 
     public void emailSenderFromTransacao(Transacao transacao, Pessoa destinatario) throws MessagingException {
 
-        MimeMessage message = getMimeMessage(destinatario);
+        MimeMessage message = emailService.getMimeMessage(destinatario.getEmail());
         message.setContent(transacao.toString(), "text/html; charset=utf-8");
 
-        send(message);
+        emailService.send(message);
     }
 
     public void emailHTMLSenderFromTransacao(Transacao transacao, Pessoa destinatario) {
@@ -27,7 +32,7 @@ public class TransacaoEmailService extends AbstractEmailService {
 
             String encodingOptions = "text/html; charset=utf-8";
 
-            String template = getTemplate("TransacaoEmail");
+            String template = emailService.getTemplate("TransacaoEmail");
             String auxiliarAssunto = (transacao.getRemetente().equals(destinatario)) ? "enviou" : "recebeu";
             String emailBody = template
                     .replaceAll("#attemp#", auxiliarAssunto)
@@ -44,11 +49,11 @@ public class TransacaoEmailService extends AbstractEmailService {
 
             mimeMultipart.addBodyPart(mbp);
 
-            MimeMessage mimeMessage = getMimeMessage(destinatario);
+            MimeMessage mimeMessage = emailService.getMimeMessage(destinatario.getEmail());
             mimeMessage.setContent(mimeMultipart);
             mimeMessage.setSubject(String.format("Você %s M$%.2f.",auxiliarAssunto, transacao.getValor()));
 
-            send(mimeMessage);
+            emailService.send(mimeMessage);
 
         } catch(Exception e) {
             e.printStackTrace();

@@ -12,18 +12,24 @@ spring:
         username: merit_money
         password: merit
     flyway:
-        enabled: false #Habilitar e desabilitar auto run do flyway
+        enabled: true #Habilitar e desabilitar auto run do flyway
 
 logging:
     level:
       root: INFO
       org.springframework.web: INFO
 
-usuario:
-    disco:
-        diretorio-foto: fotos/usuarios
-        raiz: ./src/main/resources/static/
-
-email:
-    password: mert!mon3y
-    sender: meritmoneyruler@gmail.com
+application:
+    minio:
+        host: http://localhost:39000
+        accessKey: accessKey
+        secretKey: secretKey
+        bucket:
+            images: images-folder
+    mail:
+        smtp:
+            host: smtp.gmail.com
+            port: 465
+            auth: true
+        password: teste
+        sender: gabrielcilico@gmail.com

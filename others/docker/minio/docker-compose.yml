@@ -1,0 +1,23 @@
+version: "3.3"
+
+services:
+  merit-file-server:
+    image: minio/minio:RELEASE.2020-06-22T03-12-50Z
+    restart: always
+    environment:
+      MINIO_ACCESS_KEY: accessKey
+      MINIO_SECRET_KEY: secretKey
+    ports:
+      - 39000:9000
+    command: server http://merit-file-server/data
+    volumes:
+      - merit-file-svr-data:/data:rw
+    networks:
+      - merit-backend-network
+
+volumes:
+  merit-file-svr-data:
+
+networks:
+  merit-backend-network:
+    driver: bridge

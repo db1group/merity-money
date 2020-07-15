@@ -7,43 +7,38 @@ import br.com.db1.meritmoney.exceptions.AuthorizationException;
 import br.com.db1.meritmoney.exceptions.EmailJaCadastradoException;
 import br.com.db1.meritmoney.repository.PessoaRepository;
 import br.com.db1.meritmoney.security.UserSS;
-import br.com.db1.meritmoney.storage.Disco;
-import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.db1.meritmoney.storage.EImagesNames;
+import br.com.db1.meritmoney.storage.ImageFileVO;
+import br.com.db1.meritmoney.storage.ImagesService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 @Service
 @Transactional
 public class PessoaService {
 
-    @Autowired
-    private PessoaRepository pessoaRepository;
+    private final PessoaRepository pessoaRepository;
+    private final ImagesService imagesService;
+    private final PasswordGenerator passwordGenerator;
+    private final NewUserEmailService newUserEmailService;
 
-    @Autowired
-    private Disco disco;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private AuthService authService;
-
-    @Autowired
-    private NewUserEmailService newUserEmailService;
+    public PessoaService(PessoaRepository pessoaRepository, ImagesService imagesService,
+                         PasswordGenerator passwordGenerator,
+                         NewUserEmailService newUserEmailService) {
+        this.pessoaRepository = pessoaRepository;
+        this.imagesService = imagesService;
+        this.passwordGenerator = passwordGenerator;
+        this.newUserEmailService = newUserEmailService;
+    }
 
     public Pessoa salvarPessoa(Pessoa pessoa) throws AuthorizationException {
-        UserSS user = UserService.authenticated();
+        UserSS user = UserContextUtil.authenticated();
         if (user == null || !user.hasRole(Perfil.ADMIN) && !pessoa.getId().equals(user.getId())) {
             throw new AuthorizationException();
         }
@@ -60,8 +55,8 @@ public class PessoaService {
 
         pessoa.setNome(email.substring(0,email.indexOf("@")));
         pessoa.setEmail(email);
-        String senha = authService.newPassword();
-        pessoa.setSenha(bCryptPasswordEncoder.encode(senha));
+        String senha = passwordGenerator.newEncodedPassword();
+        pessoa.setSenha(senha);
 
         newUserEmailService.emailHTMLSenderFromPessoa(pessoa, senha);
         return pessoaRepository.save(pessoa);
@@ -74,7 +69,7 @@ public class PessoaService {
 
 
     public Pessoa changePassword(Pessoa pessoa, String password) {
-        pessoa.setSenha(bCryptPasswordEncoder.encode(password));
+        pessoa.setSenha(passwordGenerator.encode(password));
         return pessoaRepository.save(pessoa);
     }
 
@@ -101,18 +96,15 @@ public class PessoaService {
         return pessoa;
     }
 
-    public String trocarFoto(MultipartFile foto) throws IOException {
-        Pessoa pessoa = pessoaRepository.findByEmail(UserService.authenticated().getUsername());
-        String path = disco.salvarFoto(foto);
+    public String trocarFoto(MultipartFile foto) {
+        Pessoa pessoa = pessoaRepository.findByEmail(UserContextUtil.authenticated().getUsername());
+        ImageFileVO saved = imagesService.salvarFoto(foto, pessoa.getId().toString(), EImagesNames.PROFILE_PHOTO);
 
-        byte[] imgContent = FileUtils.readFileToByteArray(new File(path));
-        String encodedString = "data:image.jpg;base64," + Base64.getEncoder().encodeToString(imgContent);
-
-        pessoa.setPathFoto(encodedString);
+        pessoa.setPathFoto(saved.getUrl());
 
         pessoaRepository.save(pessoa);
 
-        return encodedString;
+        return saved.getUrl();
     }
 
     public Integer getNumeroDecolaboradoresPorEquipeId(Long id) {
