@@ -23,7 +23,7 @@
     	<flyway.version>6.4.3</flyway.version>
 		<flyway-maven-plugin.version>6.4.4</flyway-maven-plugin.version>
 
-		<commons-io.version>2.6</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 		<mail.version>1.4</mail.version>
 		<jjwt.version>0.7.0</jjwt.version>
 
